@@ -17,7 +17,8 @@ struct Repository: Decodable {
   let openIssues: Int
   let pushedAt: String
   var avatarData: Data
-  
+  var contributors: [Contributor] = []
+
   private enum CodingKeys: String, CodingKey {
     case name = "name"
     case owner = "owner"
@@ -35,7 +36,8 @@ struct Repository: Decodable {
        watchers: Int,
        openIssues: Int,
        pushedAt: String,
-       avatarData: Data) {
+       avatarData: Data,
+       contributors: [Contributor]) {
     self.name = name
     self.owner = owner
     self.hasIssue = hasIssue
@@ -44,6 +46,7 @@ struct Repository: Decodable {
     self.openIssues = openIssues
     self.pushedAt = pushedAt
     self.avatarData = avatarData
+    self.contributors = contributors
   }
   
   init(from decoder: Decoder) throws {

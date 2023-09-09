@@ -46,6 +46,32 @@ extension APIManager {
     }
   }
   
+  /// 取得Contributors Info, https://api.github.com/repos/account{ray00178}/name{EasyAlbum}/contributors
+  /// - Parameters:
+  ///   - account: Account
+  ///   - name: Repo Name
+  /// - Returns: Repository
+  public func fetchContributorData(from account: String, name: String) async throws -> [Contributor] {
+    guard let url = URL(string: "https://api.github.com/repos/\(account)/\(name)/contributors")
+    else {
+      throw APIError.invalidURL
+    }
+    
+    let (data, response) = try await URLSession.shared.data(from: url)
+    
+    guard let response = response as? HTTPURLResponse,
+          response.statusCode == 200
+    else {
+      throw APIError.invalidResponse
+    }
+    
+    do {
+      return try decoder.decode([Contributor].self, from: data)
+    } catch {
+      throw APIError.parseFailure
+    }
+  }
+  
   /// 取得大頭照Data
   /// - Parameter url: 大頭照URL
   /// - Returns: Data

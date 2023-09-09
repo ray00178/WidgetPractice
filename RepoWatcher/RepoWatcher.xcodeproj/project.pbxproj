@@ -24,6 +24,9 @@
 		71D8F1E22AA621D8009F31C7 /* RepoWatcherMediumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D8F1E12AA621D8009F31C7 /* RepoWatcherMediumView.swift */; };
 		71D8F1E42AAA0FF7009F31C7 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D8F1E32AAA0FF7009F31C7 /* MockData.swift */; };
 		71D8F1E82AAA1618009F31C7 /* ContributorWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D8F1E72AAA1618009F31C7 /* ContributorWidget.swift */; };
+		71D8F1EC2AAC68B1009F31C7 /* ContributorMediumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D8F1EB2AAC68B1009F31C7 /* ContributorMediumView.swift */; };
+		71D8F1EE2AACC937009F31C7 /* Contributor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D8F1ED2AACC937009F31C7 /* Contributor.swift */; };
+		71D8F1EF2AACC937009F31C7 /* Contributor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D8F1ED2AACC937009F31C7 /* Contributor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +71,8 @@
 		71D8F1E12AA621D8009F31C7 /* RepoWatcherMediumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoWatcherMediumView.swift; sourceTree = "<group>"; };
 		71D8F1E32AAA0FF7009F31C7 /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		71D8F1E72AAA1618009F31C7 /* ContributorWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributorWidget.swift; sourceTree = "<group>"; };
+		71D8F1EB2AAC68B1009F31C7 /* ContributorMediumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributorMediumView.swift; sourceTree = "<group>"; };
+		71D8F1ED2AACC937009F31C7 /* Contributor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contributor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +121,7 @@
 				71D8F1B62A9CEB49009F31C7 /* ContentView.swift */,
 				71D8F1DE2AA37BC7009F31C7 /* APIManager.swift */,
 				71D8F1DB2AA0D79E009F31C7 /* Repository.swift */,
+				71D8F1ED2AACC937009F31C7 /* Contributor.swift */,
 				71D8F1B82A9CEB4D009F31C7 /* Assets.xcassets */,
 				71D8F1BA2A9CEB4D009F31C7 /* Preview Content */,
 			);
@@ -146,6 +152,7 @@
 				71D8F1CF2A9CEBA1009F31C7 /* CompactRepoWidget.swift */,
 				71D8F1E12AA621D8009F31C7 /* RepoWatcherMediumView.swift */,
 				71D8F1E72AAA1618009F31C7 /* ContributorWidget.swift */,
+				71D8F1EB2AAC68B1009F31C7 /* ContributorMediumView.swift */,
 				71D8F1E32AAA0FF7009F31C7 /* MockData.swift */,
 				71D8F1D12A9CEBA4009F31C7 /* Assets.xcassets */,
 				71D8F1D32A9CEBA4009F31C7 /* Info.plist */,
@@ -255,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				71D8F1DF2AA37BC7009F31C7 /* APIManager.swift in Sources */,
+				71D8F1EE2AACC937009F31C7 /* Contributor.swift in Sources */,
 				71D8F1B72A9CEB49009F31C7 /* ContentView.swift in Sources */,
 				71D8F1B52A9CEB49009F31C7 /* RepoWatcherApp.swift in Sources */,
 				71D8F1DC2AA0D79E009F31C7 /* Repository.swift in Sources */,
@@ -266,10 +274,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				71D8F1E82AAA1618009F31C7 /* ContributorWidget.swift in Sources */,
+				71D8F1EF2AACC937009F31C7 /* Contributor.swift in Sources */,
 				71D8F1E22AA621D8009F31C7 /* RepoWatcherMediumView.swift in Sources */,
 				71D8F1E42AAA0FF7009F31C7 /* MockData.swift in Sources */,
 				71D8F1E02AA37BC7009F31C7 /* APIManager.swift in Sources */,
 				71D8F1D02A9CEBA1009F31C7 /* CompactRepoWidget.swift in Sources */,
+				71D8F1EC2AAC68B1009F31C7 /* ContributorMediumView.swift in Sources */,
 				71D8F1CE2A9CEBA1009F31C7 /* RepoWatcherWidgetBundle.swift in Sources */,
 				71D8F1DD2AA0D79E009F31C7 /* Repository.swift in Sources */,
 			);

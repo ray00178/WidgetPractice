@@ -16,7 +16,8 @@ struct MockData {
                                               watchers: 898,
                                               openIssues: 10,
                                               pushedAt: "2023-08-30T22:14:00Z",
-                                              avatarData: Data())
+                                              avatarData: Data(),
+                                              contributors: [.init(userName: "Ray", avatarUrl: "", contributions: 100, avatarData: Data())])
 
   static let placeholder2: Repository = .init(name: "SwiftUI 2",
                                               owner: Owner(),
@@ -25,5 +26,6 @@ struct MockData {
                                               watchers: 10,
                                               openIssues: 5,
                                               pushedAt: "2023-01-30T22:14:00Z",
-                                              avatarData: Data())
+                                              avatarData: Data(),
+                                              contributors: [.init(userName: "Aida", avatarUrl: "", contributions: 9, avatarData: Data())])
 }
