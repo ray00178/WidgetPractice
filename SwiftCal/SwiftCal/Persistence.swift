@@ -13,9 +13,14 @@ struct PersistenceController {
   static var preview: PersistenceController = {
     let result = PersistenceController(inMemory: true)
     let viewContext = result.container.viewContext
-    for _ in 0 ..< 10 {
+    
+    guard let startDate = Calendar.current.dateInterval(of: .month, for: .now)?.start else {
+      fatalError("Can't get start date.")
+    }
+    
+    for i in 0 ..< 30 {
       let day = Day(context: viewContext)
-      day.date = Date()
+      day.date = Calendar.current.date(byAdding: .day, value: i, to: startDate)
       day.didStudy = Bool.random()
     }
     do {
