@@ -5,76 +5,154 @@
 //  Created by Ray on 2023/9/18.
 //
 
-import WidgetKit
+import CoreData
 import SwiftUI
+import WidgetKit
+
+// MARK: - Provider
 
 struct Provider: TimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), emoji: "😀")
+  var viewContext = PersistenceController.shared.container.viewContext
+
+  var dayFetchRequest: NSFetchRequest<Day> {
+    let request = Day.fetchRequest()
+    request.sortDescriptors = [NSSortDescriptor(keyPath: \Day.date, ascending: true)]
+    request.predicate = NSPredicate(format: "(date >= %@) AND (date <= %@)",
+                                    Date().startOfCalendarWithPrefixDays as CVarArg,
+                                    Date().endOfMonth as CVarArg)
+    return request
+  }
+
+  func placeholder(in _: Context) -> CalendarEntry {
+    CalendarEntry(date: Date(), days: [])
+  }
+
+  func getSnapshot(in _: Context, completion: @escaping (CalendarEntry) -> Void) {
+    do {
+      let days = try viewContext.fetch(dayFetchRequest)
+      let entry = CalendarEntry(date: Date(), days: days)
+
+      completion(entry)
+    } catch {
+      print("Widget failed to fetch days in snapshot. \(error.localizedDescription)")
     }
+  }
 
-    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), emoji: "😀")
-        completion(entry)
+  func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
+    do {
+      let days = try viewContext.fetch(dayFetchRequest)
+      let entry = CalendarEntry(date: Date(), days: days)
+      let timeline = Timeline(entries: [entry], policy: .after(.now.endOfDay))
+
+      completion(timeline)
+    } catch {
+      print("Widget failed to fetch days in timeline. \(error.localizedDescription)")
     }
+  }
+}
 
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
+// MARK: - CalendarEntry
 
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, emoji: "😀")
-            entries.append(entry)
+struct CalendarEntry: TimelineEntry {
+  let date: Date
+  let days: [Day]
+}
+
+// MARK: - SwiftCalWidgetEntryView
+
+struct SwiftCalWidgetEntryView: View {
+  var entry: CalendarEntry
+
+  var columns: [GridItem] = Array(repeating: GridItem(.flexible()), count: 7)
+
+  var body: some View {
+    HStack {
+      VStack {
+        Text("\(calculateStreakValue())")
+          .font(.system(size: 70, design: .rounded))
+          .bold()
+          .foregroundStyle(.orange)
+        Text("day streak")
+          .font(.caption2)
+          .foregroundStyle(.secondary)
+      }
+
+      VStack {
+        CalendarHeaderView(font: .caption)
+
+        LazyVGrid(columns: columns, spacing: 8) {
+          ForEach(entry.days) { day in
+            if day.date!.monthInt != Date().monthInt {
+              Text(" ")
+            } else {
+              Text(day.date!.formatted(.dateTime.day()))
+                .font(.caption2)
+                .bold()
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(day.didStudy ? .orange : .secondary)
+                .background {
+                  Circle()
+                    .foregroundStyle(.orange.opacity(day.didStudy ? 0.3 : 0.0))
+                    .scaleEffect(1.5)
+                }
+            }
+          }
         }
-
-        let timeline = Timeline(entries: entries, policy: .atEnd)
-        completion(timeline)
+      }
+      .padding(.leading, 5)
     }
-}
+    .padding()
+  }
 
-struct SimpleEntry: TimelineEntry {
-    let date: Date
-    let emoji: String
-}
+  /// 計算連續study幾日
+  func calculateStreakValue() -> Int {
+    guard entry.days.isEmpty == false else { return 0 }
 
-struct SwiftCalWidgetEntryView : View {
-    var entry: Provider.Entry
+    let nonFutureDate = entry.days.filter { $0.date!.dayInt <= Date().dayInt }
 
-    var body: some View {
-        VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
+    var streakCount = 0
 
-            Text("Emoji:")
-            Text(entry.emoji)
+    for day in nonFutureDate.reversed() {
+      if day.didStudy {
+        streakCount += 1
+      } else {
+        if day.date!.dayInt != Date().dayInt {
+          break
         }
+      }
     }
+
+    return streakCount
+  }
 }
+
+// MARK: - SwiftCalWidget
 
 struct SwiftCalWidget: Widget {
-    let kind: String = "SwiftCalWidget"
+  let kind: String = "SwiftCalWidget"
 
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            if #available(iOS 17.0, *) {
-                SwiftCalWidgetEntryView(entry: entry)
-                    .containerBackground(.fill.tertiary, for: .widget)
-            } else {
-                SwiftCalWidgetEntryView(entry: entry)
-                    .padding()
-                    .background()
-            }
-        }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+  var body: some WidgetConfiguration {
+    StaticConfiguration(kind: kind, provider: Provider()) { entry in
+      if #available(iOS 17.0, *) {
+        SwiftCalWidgetEntryView(entry: entry)
+          .containerBackground(.fill.tertiary, for: .widget)
+          .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+      } else {
+        SwiftCalWidgetEntryView(entry: entry)
+          .padding()
+          .background()
+          .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+      }
     }
+    .configurationDisplayName("Swift Study Calendar")
+    .description("Track days you study Swift with streak.")
+    .contentMarginsDisabled()
+    .supportedFamilies([.systemMedium])
+  }
 }
 
-#Preview(as: .systemSmall) {
-    SwiftCalWidget()
+#Preview(as: .systemMedium) {
+  SwiftCalWidget()
 } timeline: {
-    SimpleEntry(date: .now, emoji: "😀")
-    SimpleEntry(date: .now, emoji: "🤩")
+  CalendarEntry(date: .now, days: [])
 }

@@ -7,6 +7,7 @@
 
 import CoreData
 import SwiftUI
+import WidgetKit
 
 // MARK: - CalendarView
 
@@ -29,14 +30,7 @@ struct CalendarView: View {
   var body: some View {
     NavigationView {
       VStack {
-        HStack {
-          ForEach(daysOfWeek, id: \.self) { dayOfWeek in
-            Text(dayOfWeek)
-              .fontWeight(.black)
-              .foregroundStyle(.orange)
-              .frame(maxWidth: .infinity)
-          }
-        }
+        CalendarHeaderView()
         
         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
           ForEach(days) { (day) in
@@ -57,6 +51,10 @@ struct CalendarView: View {
                     
                     do {
                       try viewContext.save()
+                      
+                      // Reload Widget
+                      // See SwiftCalWidget to get kind string
+                      WidgetCenter.shared.reloadTimelines(ofKind: "SwiftCalWidget")
                     } catch {
                       print("Failed to save.")
                     }
@@ -110,5 +108,6 @@ struct CalendarView: View {
 }
 
 #Preview {
-  CalendarView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+  CalendarView()
+    .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
