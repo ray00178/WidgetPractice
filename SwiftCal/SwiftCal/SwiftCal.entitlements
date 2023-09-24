@@ -6,5 +6,9 @@
 	<array>
 		<string>group.tw.midnight.SwiftCal</string>
 	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)tw.midnight.SwiftCal</string>
+	</array>
 </dict>
 </plist>
