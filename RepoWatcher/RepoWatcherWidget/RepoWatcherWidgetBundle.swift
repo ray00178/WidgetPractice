@@ -1,6 +1,6 @@
 //
 //  RepoWatcherWidgetBundle.swift
-//  CompactRepoWidget
+//  DoubleRepoWidget
 //
 //  Created by Ray on 2023/8/28.
 //
@@ -11,7 +11,8 @@ import WidgetKit
 @main
 struct RepoWatcherWidgetBundle: WidgetBundle {
   var body: some Widget {
-    CompactRepoWidget()
-    ContributorWidget() 
+    // 放入各種樣式的Widgte
+    SingleRepoWidget()
+    DoubleRepoWidget()
   }
 }
