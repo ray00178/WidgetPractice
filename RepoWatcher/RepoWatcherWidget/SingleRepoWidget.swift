@@ -10,26 +10,31 @@ import WidgetKit
 
 // MARK: - SingleRepoPrivoder
 
-struct SingleRepoPrivoder: TimelineProvider {
+struct SingleRepoPrivoder: IntentTimelineProvider {
+  typealias Entry = SingleRepoEntry
+  
+  typealias Intent = SelectSingleRepoIntent
+  
   func placeholder(in _: Context) -> SingleRepoEntry {
     SingleRepoEntry(date: .now, repo: MockData.placeholder1)
   }
-
-  func getSnapshot(in _: Context, completion: @escaping (SingleRepoEntry) -> Void) {
+  
+  func getSnapshot(for configuration: SelectSingleRepoIntent, in context: Context, completion: @escaping (SingleRepoEntry) -> Void) {
     let entry = SingleRepoEntry(date: .now, repo: MockData.placeholder1)
     completion(entry)
   }
-
-  func getTimeline(in context: Context, completion: @escaping (Timeline<SingleRepoEntry>) -> Void) {
+  
+  func getTimeline(for configuration: SelectSingleRepoIntent, in context: Context, completion: @escaping (Timeline<SingleRepoEntry>) -> Void) {
     Task {
       let nextUpdate = Date().addingTimeInterval(1800)
 
       do {
         // ray00178, EasyAlbum
         // onevcat, Kingfisher
-
-        let user = "ray00178"
-        let repoName = "EasyAlbum"
+        // configuration.repo = ray00178/EasyAlbum
+        let values = configuration.repo!.components(separatedBy: "/")
+        let user = values[0]
+        let repoName = values[1]
 
         // Get Repo
         var repo = try await APIManager.shared.fetchGithubRepoData(from: user,
@@ -98,7 +103,7 @@ struct SingleRepoWidget: Widget {
   let kind: String = "SingleRepoWidget"
 
   var body: some WidgetConfiguration {
-    StaticConfiguration(kind: kind, provider: SingleRepoPrivoder()) { entry in
+    IntentConfiguration(kind: kind, intent: SelectSingleRepoIntent.self, provider: SingleRepoPrivoder()) { entry in
       if #available(iOS 17.0, *) {
         SingleRepoEntryView(entry: entry)
           .containerBackground(.white.gradient, for: .widget)
@@ -112,6 +117,21 @@ struct SingleRepoWidget: Widget {
     .description("This is an contributor widget.")
     .supportedFamilies([.systemMedium, .systemLarge])
     .contentMarginsDisabled()
+    
+    /*StaticConfiguration(kind: kind, provider: SingleRepoPrivoder()) { entry in
+      if #available(iOS 17.0, *) {
+        SingleRepoEntryView(entry: entry)
+          .containerBackground(.white.gradient, for: .widget)
+      } else {
+        SingleRepoEntryView(entry: entry)
+          .padding()
+          .background()
+      }
+    }
+    .configurationDisplayName("Single Repository Widget")
+    .description("This is an contributor widget.")
+    .supportedFamilies([.systemMedium, .systemLarge])
+    .contentMarginsDisabled()*/
   }
 }
 

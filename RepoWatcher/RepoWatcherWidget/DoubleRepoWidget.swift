@@ -10,21 +10,26 @@ import WidgetKit
 
 // MARK: - DoubleRepoProvider
 
-struct DoubleRepoProvider: TimelineProvider {
+struct DoubleRepoProvider: IntentTimelineProvider {
+  
+  typealias Entry = DoubleRepoEntry
+  
+  typealias Intent = SelectTwoReposIntent
+  
   func placeholder(in _: Context) -> DoubleRepoEntry {
     DoubleRepoEntry(date: Date(),
                     TopRepo: MockData.placeholder1,
                     bottomRepo: MockData.placeholder2)
   }
-
-  func getSnapshot(in _: Context, completion: @escaping (DoubleRepoEntry) -> Void) {
+  
+  func getSnapshot(for configuration: SelectTwoReposIntent, in context: Context, completion: @escaping (DoubleRepoEntry) -> Void) {
     let entry = DoubleRepoEntry(date: Date(),
                                 TopRepo: MockData.placeholder1,
                                 bottomRepo: MockData.placeholder2)
     completion(entry)
   }
-
-  func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
+  
+  func getTimeline(for configuration: SelectTwoReposIntent, in context: Context, completion: @escaping (Timeline<DoubleRepoEntry>) -> Void) {
     Task(priority: .background) {
       // Every 30min update
       let nextUpdate = Date().addingTimeInterval(1800)
@@ -32,14 +37,15 @@ struct DoubleRepoProvider: TimelineProvider {
       do {
         // ray00178, EasyAlbum
         // onevcat, Kingfisher
-
+        let topValues = configuration.topRepo!.components(separatedBy: "/")
         // Get Top Repo
-        var repo = try await APIManager.shared.fetchGithubRepoData(from: "ray00178", name: "EasyAlbum")
+        var repo = try await APIManager.shared.fetchGithubRepoData(from: topValues[0], name: topValues[1])
         let topAvatarData = await APIManager.shared.fetchAvatarData(from: repo.owner.avatarUrl)
         repo.avatarData = topAvatarData
 
         // Get Bottom Repo
-        var bottomRepo = try await APIManager.shared.fetchGithubRepoData(from: "onevcat", name: "Kingfisher")
+        let bottomValues = configuration.bottomRepo!.components(separatedBy: "/")
+        var bottomRepo = try await APIManager.shared.fetchGithubRepoData(from: bottomValues[0], name: bottomValues[1])
 
         let bottomAvatarData = await APIManager.shared.fetchAvatarData(from: bottomRepo.owner.avatarUrl)
         bottomRepo.avatarData = bottomAvatarData
@@ -53,6 +59,8 @@ struct DoubleRepoProvider: TimelineProvider {
       }
     }
   }
+  
+  
 }
 
 // MARK: - DoubleRepoEntry
@@ -82,7 +90,7 @@ struct DoubleRepoWidget: Widget {
   let kind: String = "DoubleRepoWidget"
 
   var body: some WidgetConfiguration {
-    StaticConfiguration(kind: kind, provider: DoubleRepoProvider()) { entry in
+    IntentConfiguration(kind: kind, intent: SelectTwoReposIntent.self, provider: DoubleRepoProvider()) { entry in
       if #available(iOS 17.0, *) {
         DoubleRepoEntryView(entry: entry)
           .containerBackground(.white.gradient, for: .widget)
@@ -96,6 +104,21 @@ struct DoubleRepoWidget: Widget {
     .description("Keep an eye two GitHub repositories.")
     .supportedFamilies([.systemLarge])
     .contentMarginsDisabled()
+    
+    /*StaticConfiguration(kind: kind, provider: DoubleRepoProvider()) { entry in
+      if #available(iOS 17.0, *) {
+        DoubleRepoEntryView(entry: entry)
+          .containerBackground(.white.gradient, for: .widget)
+      } else {
+        DoubleRepoEntryView(entry: entry)
+          .padding()
+          .background()
+      }
+    }
+    .configurationDisplayName("My Widget")
+    .description("Keep an eye two GitHub repositories.")
+    .supportedFamilies([.systemLarge])
+    .contentMarginsDisabled()*/
   }
 }
 

@@ -15,3 +15,8 @@ extension UserDefaults {
   
   static let repoKey: String = "repos"
 }
+
+enum UserDefaultsError: Error {
+  
+  case retrieval
+}
