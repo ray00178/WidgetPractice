@@ -11,9 +11,6 @@ import WidgetKit
 // MARK: - SingleRepoPrivoder
 
 struct SingleRepoPrivoder: IntentTimelineProvider {
-  typealias Entry = SingleRepoEntry
-  
-  typealias Intent = SelectSingleRepoIntent
   
   func placeholder(in _: Context) -> SingleRepoEntry {
     SingleRepoEntry(date: .now, repo: MockData.placeholder1)
@@ -91,6 +88,34 @@ struct SingleRepoEntryView: View {
         RepoWatcherMediumView(repo: entry.repo)
         ContributorMediumView(repo: entry.repo)
       }
+    case .accessoryInline:
+      Text("\(entry.repo.name) - \(entry.repo.daysSinceLastActivity) days")
+    case .accessoryCircular:
+      ZStack {
+        AccessoryWidgetBackground()
+        VStack {
+          Text("\(entry.repo.daysSinceLastActivity)")
+            .font(.headline)
+          Text("days")
+            .font(.caption)
+        }
+      }
+    case .accessoryRectangular:
+      VStack(alignment: .leading) {
+        Text(entry.repo.name)
+          .bold()
+        Text("\(entry.repo.daysSinceLastActivity) days")
+        
+        HStack {
+          StatLabel(value: entry.repo.watchers, systemImageName: "star.fill")
+          StatLabel(value: entry.repo.forks, systemImageName: "tuningfork")
+
+          if entry.repo.hasIssue {
+            StatLabel(value: entry.repo.openIssues, systemImageName: "exclamationmark.triangle.fill")
+          }
+        }
+        .font(.callout)
+      }
     default:
       EmptyView()
     }
@@ -115,8 +140,13 @@ struct SingleRepoWidget: Widget {
     }
     .configurationDisplayName("Single Repository Widget")
     .description("This is an contributor widget.")
-    .supportedFamilies([.systemMedium, .systemLarge])
     .contentMarginsDisabled()
+    .supportedFamilies([.systemMedium,
+                        .systemLarge,
+                        .accessoryInline,
+                        .accessoryCircular,
+                        .accessoryRectangular])
+    
     
     /*StaticConfiguration(kind: kind, provider: SingleRepoPrivoder()) { entry in
       if #available(iOS 17.0, *) {
@@ -142,6 +172,12 @@ struct SingleRepoWidget: Widget {
 }
 
 #Preview(as: .systemLarge) {
+  SingleRepoWidget()
+} timeline: {
+  SingleRepoEntry(date: .now, repo: MockData.placeholder1)
+}
+
+#Preview(as: .accessoryRectangular) {
   SingleRepoWidget()
 } timeline: {
   SingleRepoEntry(date: .now, repo: MockData.placeholder1)

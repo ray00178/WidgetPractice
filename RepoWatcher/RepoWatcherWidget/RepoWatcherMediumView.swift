@@ -11,14 +11,11 @@ import WidgetKit
 // MARK: - RepoWatcherMediumView
 
 struct RepoWatcherMediumView: View {
-  private let formatter = ISO8601DateFormatter()
   
   let repo: Repository
   
-  var diffDays: Int {
-    calculateDaysSinceLastActivity(from: repo.pushedAt)
-  }
-
+  var diffDays: Int { repo.daysSinceLastActivity }
+  
   var body: some View {
     HStack {
       VStack(alignment: .leading) {
@@ -68,12 +65,6 @@ struct RepoWatcherMediumView: View {
       }
     }
     .padding()
-  }
-
-  func calculateDaysSinceLastActivity(from date: String) -> Int {
-    let lastActivity = formatter.date(from: date) ?? .now
-    let diffDays = Calendar.current.dateComponents([.day], from: lastActivity, to: .now).day ?? 0
-    return diffDays
   }
 }
 

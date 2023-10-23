@@ -18,6 +18,13 @@ struct Repository: Decodable {
   let pushedAt: String
   var avatarData: Data
   var contributors: [Contributor] = []
+  
+  var daysSinceLastActivity: Int {
+    let formatter = ISO8601DateFormatter()
+    let lastActivity = formatter.date(from: pushedAt) ?? .now
+    let diffDays = Calendar.current.dateComponents([.day], from: lastActivity, to: .now).day ?? 0
+    return diffDays
+  }
 
   private enum CodingKeys: String, CodingKey {
     case name = "name"
