@@ -145,10 +145,10 @@
 				71D8F2052AAD98F4009F31C7 /* Persistence.swift */,
 				71212F6E2AB1FC0800375AA0 /* Date+Extension.swift */,
 				71212F702AB34F7200375AA0 /* StreakView.swift */,
+				718C672F2AB9DFFC0088CCC1 /* CalendarHeaderView.swift */,
 				71D8F2072AAD98F4009F31C7 /* SwiftCal.xcdatamodeld */,
 				71D8F2002AAD98F4009F31C7 /* Assets.xcassets */,
 				71D8F2022AAD98F4009F31C7 /* Preview Content */,
-				718C672F2AB9DFFC0088CCC1 /* CalendarHeaderView.swift */,
 			);
 			path = SwiftCal;
 			sourceTree = "<group>";
