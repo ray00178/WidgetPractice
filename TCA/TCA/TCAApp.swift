@@ -5,13 +5,14 @@
 //  Created by Ray on 2023/11/18.
 //
 
+//import Feature
 import SwiftUI
 
-@main
+// @main
 struct TCAApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
     }
+  }
 }

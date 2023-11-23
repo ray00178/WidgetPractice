@@ -11,6 +11,7 @@
 		710399962B0863AB0043CCF3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710399952B0863AB0043CCF3 /* ContentView.swift */; };
 		710399982B0863AC0043CCF3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 710399972B0863AC0043CCF3 /* Assets.xcassets */; };
 		7103999B2B0863AC0043CCF3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7103999A2B0863AC0043CCF3 /* Preview Assets.xcassets */; };
+		710399A42B08691F0043CCF3 /* Feature in Frameworks */ = {isa = PBXBuildFile; productRef = 710399A32B08691F0043CCF3 /* Feature */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				710399A42B08691F0043CCF3 /* Feature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -39,6 +41,7 @@
 				710399A12B0864EB0043CCF3 /* Feature */,
 				710399922B0863AB0043CCF3 /* TCA */,
 				710399912B0863AB0043CCF3 /* Products */,
+				710399A22B08691F0043CCF3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -69,6 +72,13 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		710399A22B08691F0043CCF3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -85,6 +95,9 @@
 			dependencies = (
 			);
 			name = TCA;
+			packageProductDependencies = (
+				710399A32B08691F0043CCF3 /* Feature */,
+			);
 			productName = TCA;
 			productReference = 710399902B0863AB0043CCF3 /* TCA.app */;
 			productType = "com.apple.product-type.application";
@@ -273,7 +286,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TCA/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "TCA/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZGW479ZTBD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -302,7 +315,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TCA/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "TCA/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZGW479ZTBD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -346,6 +359,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		710399A32B08691F0043CCF3 /* Feature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Feature;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 710399882B0863AB0043CCF3 /* Project object */;
 }

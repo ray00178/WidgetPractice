@@ -7,13 +7,19 @@
 
 import Foundation
 
-struct GameState {
-    let homeScore: Int
-    let awayScore: Int
-    let scoringTeamName: String
-    let lastAction: String
+struct GameState: Codable, Hashable {
+  let homeScore: Int
+  let awayScore: Int
+  let scoringTeamName: String
+  let lastAction: String
 
-    var winningTeamName: String {
-        homeScore > awayScore ? "warriors" : "bulls"
-    }
+  var winningTeamName: String {
+    homeScore > awayScore ? "warriors" : "bulls"
+  }
+}
+
+extension GameState {
+  
+  static let placehodler = GameState(homeScore: 10, awayScore: 2, scoringTeamName: "World", lastAction: "")
+  
 }
