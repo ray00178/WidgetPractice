@@ -20,6 +20,7 @@
 		710399C42B097B760043CCF3 /* Image+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67D6352917E3E40097D139 /* Image+Ext.swift */; };
 		710399C62B10EB9D0043CCF3 /* GameAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710399C52B10EB9D0043CCF3 /* GameAttributes.swift */; };
 		710399C72B10EB9D0043CCF3 /* GameAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710399C52B10EB9D0043CCF3 /* GameAttributes.swift */; };
+		710399CA2B10F53E0043CCF3 /* LiveActivitySetting.png in Resources */ = {isa = PBXBuildFile; fileRef = 710399C92B10F53E0043CCF3 /* LiveActivitySetting.png */; };
 		ED67D6222917E3510097D139 /* BasketballSimApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67D6212917E3510097D139 /* BasketballSimApp.swift */; };
 		ED67D6262917E3520097D139 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED67D6252917E3520097D139 /* Assets.xcassets */; };
 		ED67D6292917E3520097D139 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED67D6282917E3520097D139 /* Preview Assets.xcassets */; };
@@ -67,6 +68,8 @@
 		710399B82B087E410043CCF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		710399C12B09770E0043CCF3 /* LiveActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityView.swift; sourceTree = "<group>"; };
 		710399C52B10EB9D0043CCF3 /* GameAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameAttributes.swift; sourceTree = "<group>"; };
+		710399C92B10F53E0043CCF3 /* LiveActivitySetting.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LiveActivitySetting.png; sourceTree = "<group>"; };
+		710399CB2B1168CC0043CCF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		ED67D61E2917E3510097D139 /* BasketballSim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BasketballSim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED67D6212917E3510097D139 /* BasketballSimApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketballSimApp.swift; sourceTree = "<group>"; };
 		ED67D6252917E3520097D139 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -122,6 +125,14 @@
 			path = GameWidget;
 			sourceTree = "<group>";
 		};
+		710399C82B10F5240043CCF3 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				710399C92B10F53E0043CCF3 /* LiveActivitySetting.png */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
 		ED67D6152917E3510097D139 = {
 			isa = PBXGroup;
 			children = (
@@ -144,6 +155,8 @@
 		ED67D6202917E3510097D139 /* BasketballSim */ = {
 			isa = PBXGroup;
 			children = (
+				710399CB2B1168CC0043CCF3 /* Info.plist */,
+				710399C82B10F5240043CCF3 /* Resource */,
 				ED67D6212917E3510097D139 /* BasketballSimApp.swift */,
 				ED67D62F2917E37C0097D139 /* GameView.swift */,
 				ED67D6342917E3C20097D139 /* Model */,
@@ -230,7 +243,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1410;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					710399A82B087E400043CCF3 = {
 						CreatedOnToolsVersion = 15.0;
@@ -275,6 +288,7 @@
 			files = (
 				ED67D6292917E3520097D139 /* Preview Assets.xcassets in Resources */,
 				ED67D6262917E3520097D139 /* Assets.xcassets in Resources */,
+				710399CA2B10F53E0043CCF3 /* LiveActivitySetting.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,6 +405,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -451,6 +466,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -514,6 +530,7 @@
 				DEVELOPMENT_TEAM = ZGW479ZTBD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BasketballSim/Info.plist;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -547,6 +564,7 @@
 				DEVELOPMENT_TEAM = ZGW479ZTBD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BasketballSim/Info.plist;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -40,10 +40,13 @@ final class GameModel: ObservableObject, GameSimulatorDelegate {
     do {
       let attributes = GameAttributes(homeTeam: "warriors", awayTeam: "bulls")
       let currentGameState = GameAttributes.ContentState(gameState: gameState)
-
-      // pushType = Use Remote Push Notification
+      
       liveActivity = try Activity.request(attributes: attributes,
-                                           content: .init(state: currentGameState, staleDate: nil))
+                                          content: .init(state: currentGameState, staleDate: nil))
+      // pushType = Use Remote Push Notification
+//      liveActivity = try Activity.request(attributes: attributes,
+//                                          content: .init(state: currentGameState, staleDate: nil),
+//                                          pushType: .token)
     } catch {
       print(error.localizedDescription)
     }
