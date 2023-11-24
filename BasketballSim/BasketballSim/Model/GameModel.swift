@@ -5,28 +5,47 @@
 //  Created by Sean Allen on 11/6/22.
 //
 
+import ActivityKit
 import Foundation
 
 final class GameModel: ObservableObject, GameSimulatorDelegate {
+  @Published var gameState = GameState(homeScore: 0,
+                                       awayScore: 0,
+                                       scoringTeamName: "",
+                                       lastAction: "")
 
-    @Published var gameState = GameState(homeScore: 0,
-                                          awayScore: 0,
-                                          scoringTeamName: "",
-                                          lastAction: "")
-    let simulator = GameSimulator()
+  var liveActivity: Activity<GameAttributes>? = nil
 
-    init() {
-        simulator.delegate = self
+  let simulator = GameSimulator()
+
+  init() {
+    simulator.delegate = self
+  }
+
+  func didUpdate(gameState: GameState) {
+    self.gameState = gameState
+
+    Task {
+      await liveActivity?.update(using: .init(gameState: gameState))
     }
+  }
 
-    func didUpdate(gameState: GameState) {
-        self.gameState = gameState
+  func didCompleteGame() {
+    Task {
+      await liveActivity?.end(using: .init(gameState: simulator.endGame()), dismissalPolicy: .default)
     }
+  }
 
-    func didCompleteGame() {
+  func startLiveActivity() {
+    do {
+      let attributes = GameAttributes(homeTeam: "warriors", awayTeam: "bulls")
+      let currentGameState = GameAttributes.ContentState(gameState: gameState)
 
+      // pushType = Use Remote Push Notification
+      liveActivity = try Activity.request(attributes: attributes,
+                                           content: .init(state: currentGameState, staleDate: nil))
+    } catch {
+      print(error.localizedDescription)
     }
-
-
-    // Live Activity code goes here
+  }
 }

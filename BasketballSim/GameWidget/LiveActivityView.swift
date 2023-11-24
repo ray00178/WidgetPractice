@@ -11,6 +11,9 @@ import WidgetKit
 // MARK: - LiveActivityView
 
 struct LiveActivityView: View {
+  
+  let context: ActivityViewContext<GameAttributes>
+  
   var body: some View {
     ZStack {
       Image(.activityBackground)
@@ -23,28 +26,28 @@ struct LiveActivityView: View {
 
       VStack(spacing: 12) {
         HStack {
-          Image(.warriors)
+          Image(context.attributes.homeTeam)
             .teamLogoModifier(frame: 60)
 
-          Text("125")
+          Text("\(context.state.gameState.homeScore)")
             .font(.system(size: 40, weight: .bold))
             .foregroundStyle(.white.opacity(0.8))
 
           Spacer()
 
-          Text("60")
+          Text("\(context.state.gameState.awayScore)")
             .font(.system(size: 40, weight: .bold))
             .foregroundStyle(.black.opacity(0.8))
 
-          Image(.bulls)
+          Image(context.attributes.awayTeam)
             .teamLogoModifier(frame: 60)
         }
         
         HStack {
-          Image(.warriors)
+          Image(context.state.gameState.scoringTeamName)
             .teamLogoModifier(frame: 20)
           
-          Text("S. Curry drains a 3")
+          Text(context.state.gameState.lastAction)
             .font(.callout)
             .fontWeight(.semibold)
             .foregroundStyle(.white.opacity(0.9))
@@ -57,10 +60,11 @@ struct LiveActivityView: View {
 
 // MARK: - LiveActivityView_Preview
 
-struct LiveActivityView_Preview: PreviewProvider {
+// Didn't to preview
+/*struct LiveActivityView_Preview: PreviewProvider {
   static var previews: some View {
     LiveActivityView()
       .previewContext(WidgetPreviewContext(family: .systemMedium))
       .containerBackground(.white.gradient, for: .widget)
   }
-}
+}*/

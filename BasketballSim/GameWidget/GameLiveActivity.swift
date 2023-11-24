@@ -9,57 +9,44 @@ import ActivityKit
 import SwiftUI
 import WidgetKit
 
-// MARK: - GameAttributes
-
-struct GameAttributes: ActivityAttributes {
-  public struct ContentState: Codable, Hashable {
-    // Dynamic stateful properties about your activity go here!
-    var gameState: GameState
-  }
-
-  // Fixed non-changing properties about your activity go here!
-  var homeTeam: String
-  var awayTeam: String
-}
-
 // MARK: - GameLiveActivity
 
 struct GameLiveActivity: Widget {
+  
   var body: some WidgetConfiguration {
-    ActivityConfiguration(for: GameAttributes.self) { _ in
+    ActivityConfiguration(for: GameAttributes.self) { context in
       // Lock screen/banner UI goes here
-      LiveActivityView()
-
-    } dynamicIsland: { _ in
+      LiveActivityView(context: context)
+    } dynamicIsland: { context in
       DynamicIsland {
         // Expanded UI goes here.  Compose the expanded UI through
         // various regions, like leading/trailing/center/bottom
         DynamicIslandExpandedRegion(.leading) {
           HStack {
-            Image(.warriors)
+            Image(context.attributes.homeTeam)
               .teamLogoModifier(frame: 40)
 
-            Text("100")
+            Text("\(context.state.gameState.homeScore)")
               .font(.title)
               .fontWeight(.semibold)
           }
         }
         DynamicIslandExpandedRegion(.trailing) {
           HStack {
-            Text("88")
+            Text("\(context.state.gameState.awayScore)")
               .font(.title)
               .fontWeight(.semibold)
 
-            Image(.bulls)
+            Image(context.attributes.awayTeam)
               .teamLogoModifier(frame: 40)
           }
         }
         DynamicIslandExpandedRegion(.bottom) {
           HStack {
-            Image(.warriors)
+            Image(context.state.gameState.scoringTeamName)
               .teamLogoModifier(frame: 20)
             
-            Text("S. Curry drains a 3")
+            Text(context.state.gameState.lastAction)
           }
         }
         DynamicIslandExpandedRegion(.center) {
@@ -67,22 +54,22 @@ struct GameLiveActivity: Widget {
         }
       } compactLeading: {
         HStack {
-          Image(.warriors)
+          Image(context.attributes.homeTeam)
             .teamLogoModifier()
 
-          Text("100")
+          Text("\(context.state.gameState.homeScore)")
             .fontWeight(.semibold)
         }
       } compactTrailing: {
         HStack {
-          Text("88")
+          Text("\(context.state.gameState.awayScore)")
             .fontWeight(.semibold)
 
-          Image(.bulls)
+          Image(context.attributes.awayTeam)
             .teamLogoModifier()
         }
       } minimal: {
-        Image(.warriors)
+        Image(context.state.gameState.winningTeamName)
           .teamLogoModifier()
       }
       .widgetURL(URL(string: "http://www.apple.com"))
