@@ -40,9 +40,11 @@ final class GameModel: ObservableObject, GameSimulatorDelegate {
     do {
       let attributes = GameAttributes(homeTeam: "warriors", awayTeam: "bulls")
       let currentGameState = GameAttributes.ContentState(gameState: gameState)
-      
+
       liveActivity = try Activity.request(attributes: attributes,
                                           content: .init(state: currentGameState, staleDate: nil))
+      
+      // 使用推播通知來更新Live Activity
       // pushType = Use Remote Push Notification
 //      liveActivity = try Activity.request(attributes: attributes,
 //                                          content: .init(state: currentGameState, staleDate: nil),

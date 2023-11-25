@@ -12,17 +12,23 @@ import WidgetKit
 
 struct LiveActivityView: View {
   
-  let context: ActivityViewContext<GameAttributes>
+  @Environment(\.isActivityFullscreen) private var isActivityFullscreen
   
+  let context: ActivityViewContext<GameAttributes>
+
   var body: some View {
     ZStack {
-      Image(.activityBackground)
-        .resizable()
-        .aspectRatio(contentMode: .fill)
-        .overlay {
-          ContainerRelativeShape()
-            .fill(.black.opacity(0.3).gradient)
-        }
+      // Stand By Mode
+      if isActivityFullscreen == false {
+        Image(.activityBackground)
+          .resizable()
+          .aspectRatio(contentMode: .fill)
+          .overlay {
+            ContainerRelativeShape()
+              .fill(.black.opacity(0.3).gradient)
+          }
+      }
+      
 
       VStack(spacing: 12) {
         HStack {
@@ -32,21 +38,24 @@ struct LiveActivityView: View {
           Text("\(context.state.gameState.homeScore)")
             .font(.system(size: 40, weight: .bold))
             .foregroundStyle(.white.opacity(0.8))
+            // Font animation
+            .contentTransition(.numericText())
 
           Spacer()
 
           Text("\(context.state.gameState.awayScore)")
             .font(.system(size: 40, weight: .bold))
-            .foregroundStyle(.black.opacity(0.8))
+            .foregroundStyle(isActivityFullscreen ? .white : .black.opacity(0.8))
+            .contentTransition(.numericText())
 
           Image(context.attributes.awayTeam)
             .teamLogoModifier(frame: 60)
         }
-        
+
         HStack {
           Image(context.state.gameState.scoringTeamName)
             .teamLogoModifier(frame: 20)
-          
+
           Text(context.state.gameState.lastAction)
             .font(.callout)
             .fontWeight(.semibold)
@@ -61,10 +70,10 @@ struct LiveActivityView: View {
 // MARK: - LiveActivityView_Preview
 
 // Didn't to preview
-/*struct LiveActivityView_Preview: PreviewProvider {
-  static var previews: some View {
-    LiveActivityView()
-      .previewContext(WidgetPreviewContext(family: .systemMedium))
-      .containerBackground(.white.gradient, for: .widget)
-  }
-}*/
+/* struct LiveActivityView_Preview: PreviewProvider {
+   static var previews: some View {
+     LiveActivityView()
+       .previewContext(WidgetPreviewContext(family: .systemMedium))
+       .containerBackground(.white.gradient, for: .widget)
+   }
+ } */
