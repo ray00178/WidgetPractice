@@ -76,6 +76,9 @@ struct DayEntry: TimelineEntry {
 // MARK: - MonthlyWidgetEntryView
 
 struct MonthlyWidgetEntryView: View {
+  @Environment(\.showsWidgetContainerBackground) var showsWidgetContainerBackground
+  @Environment(\.widgetRenderingMode) var rendingMode
+  
   var entry: DayEntry
   var config: MonthConfig
   let funFontName: String = "Chalkduster"
@@ -86,28 +89,45 @@ struct MonthlyWidgetEntryView: View {
   }
 
   var body: some View {
-    ZStack {
-      ContainerRelativeShape()
-        .fill(config.backgroundColor.gradient)
-
-      VStack {
-        HStack(spacing: 4) {
-          Text(config.emoji)
-            .font(.title)
-          Text(entry.date.formatted(.dateTime.weekday(.wide)))
-            .font(entry.showFunFont ? .custom(funFontName, size: 24) : .title3)
-            .fontWeight(.bold)
-            .minimumScaleFactor(0.6)
-            .foregroundColor(config.weekdayColor)
-          Spacer()
+    if #available(iOS 17.0, *) {
+      calendarBody()
+        .containerBackground(for: .widget) {
+          ContainerRelativeShape()
+            .fill(config.backgroundColor.gradient)
         }
-
-        Text(entry.date.formatted(.dateTime.day(.twoDigits)))
-          .font(entry.showFunFont ? .custom(funFontName, size: 80) :
-                                    .system(size: 80, weight: .heavy))
-          .foregroundStyle(config.dayColor)
+    } else {
+      ZStack {
+        ContainerRelativeShape()
+          .fill(config.backgroundColor.gradient)
+        calendarBody()
+          .padding()
       }
-      .padding()
+    }
+  }
+
+  @MainActor
+  @ViewBuilder
+  private func calendarBody() -> some View {
+    VStack {
+      HStack(spacing: 4) {
+        Text(config.emoji)
+          .font(.title)
+        Text(entry.date.formatted(.dateTime.weekday(.wide)))
+          .font(entry.showFunFont ? .custom(funFontName, size: 24) : .title3)
+          .fontWeight(.bold)
+          .minimumScaleFactor(0.6)
+          .foregroundStyle(showsWidgetContainerBackground ? config.weekdayColor : .white)
+        Spacer()
+      }
+      .id(entry.date)
+      .transition(.push(from: .trailing))
+      .animation(.bouncy, value: entry.date)
+
+      Text(entry.date.formatted(.dateTime.day(.twoDigits)))
+        .font(entry.showFunFont ? .custom(funFontName, size: 80) :
+          .system(size: 80, weight: .heavy))
+        .contentTransition(.numericText())
+        .foregroundStyle(showsWidgetContainerBackground ? config.dayColor : .white)
     }
   }
 }
@@ -138,11 +158,13 @@ struct MonthlyWidget: Widget {
     // iOS 17 later 主要用來取消預設padding
     // Reference = https://shorturl.at/diAIR
     .contentMarginsDisabled()
+    // 禁止哪些地方顯示Widget
+    .disfavoredLocations([.lockScreen], for: [.systemSmall])
   }
 }
 
 #Preview(as: .systemSmall) {
   MonthlyWidget()
 } timeline: {
-  DayEntry(date: .now, showFunFont: true)
+  DayEntry(date: .now, showFunFont: false)
 }
