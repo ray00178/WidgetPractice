@@ -58,6 +58,7 @@ struct RepoWatcherMediumView: View {
           .minimumScaleFactor(0.6)
           .lineLimit(1)
           .foregroundStyle(diffDays > 50 ? .pink : .green)
+          .contentTransition(.numericText())
 
         Text("days ago")
           .font(.caption2)

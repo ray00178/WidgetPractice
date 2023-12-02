@@ -131,7 +131,7 @@ struct SingleRepoWidget: Widget {
     IntentConfiguration(kind: kind, intent: SelectSingleRepoIntent.self, provider: SingleRepoPrivoder()) { entry in
       if #available(iOS 17.0, *) {
         SingleRepoEntryView(entry: entry)
-          .containerBackground(.white.gradient, for: .widget)
+          .containerBackground(for: .widget) {}
       } else {
         SingleRepoEntryView(entry: entry)
           .padding()
@@ -175,6 +175,7 @@ struct SingleRepoWidget: Widget {
   SingleRepoWidget()
 } timeline: {
   SingleRepoEntry(date: .now, repo: MockData.placeholder1)
+  SingleRepoEntry(date: .now, repo: MockData.placeholder2)
 }
 
 #Preview(as: .accessoryRectangular) {
