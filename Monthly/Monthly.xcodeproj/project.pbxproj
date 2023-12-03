@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7175D0762AC1C7AA00710B1E /* MonthlyWidgetIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 7175D0752AC1C7AA00710B1E /* MonthlyWidgetIntents.intentdefinition */; };
-		7175D0772AC1C7AA00710B1E /* MonthlyWidgetIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 7175D0752AC1C7AA00710B1E /* MonthlyWidgetIntents.intentdefinition */; };
 		71D8F17D2A99E09E009F31C7 /* MonthlyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D8F17C2A99E09E009F31C7 /* MonthlyApp.swift */; };
 		71D8F17F2A99E09E009F31C7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D8F17E2A99E09E009F31C7 /* ContentView.swift */; };
 		71D8F1812A99E0A1009F31C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71D8F1802A99E0A1009F31C7 /* Assets.xcassets */; };
@@ -49,7 +47,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7175D0752AC1C7AA00710B1E /* MonthlyWidgetIntents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = MonthlyWidgetIntents.intentdefinition; sourceTree = "<group>"; };
 		7175D0782AC1C7BC00710B1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		71D8F1792A99E09E009F31C7 /* Monthly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Monthly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71D8F17C2A99E09E009F31C7 /* MonthlyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyApp.swift; sourceTree = "<group>"; };
@@ -144,7 +141,6 @@
 				71D8F1A32A9B959F009F31C7 /* MonthConfig.swift */,
 				71D8F1992A99E0F6009F31C7 /* Assets.xcassets */,
 				71D8F19B2A99E0F6009F31C7 /* Info.plist */,
-				7175D0752AC1C7AA00710B1E /* MonthlyWidgetIntents.intentdefinition */,
 			);
 			path = MonthlyWidget;
 			sourceTree = "<group>";
@@ -252,7 +248,6 @@
 			files = (
 				71D8F17F2A99E09E009F31C7 /* ContentView.swift in Sources */,
 				71D8F1A62A9B972E009F31C7 /* Extension+Color.swift in Sources */,
-				7175D0762AC1C7AA00710B1E /* MonthlyWidgetIntents.intentdefinition in Sources */,
 				71D8F17D2A99E09E009F31C7 /* MonthlyApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -263,7 +258,6 @@
 			files = (
 				71D8F1962A99E0F2009F31C7 /* MonthlyWidgetBundle.swift in Sources */,
 				71D8F1A42A9B959F009F31C7 /* MonthConfig.swift in Sources */,
-				7175D0772AC1C7AA00710B1E /* MonthlyWidgetIntents.intentdefinition in Sources */,
 				71D8F1982A99E0F2009F31C7 /* MonthlyWidget.swift in Sources */,
 				71D8F1A72A9B972E009F31C7 /* Extension+Color.swift in Sources */,
 			);

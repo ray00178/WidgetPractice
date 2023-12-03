@@ -5,17 +5,41 @@
 //  Created by Ray on 2023/8/26.
 //
 
+import AppIntents
 import SwiftUI
 import WidgetKit
 
 // MARK: - Provider
 
-struct Provider: IntentTimelineProvider {
+struct Provider: AppIntentTimelineProvider {
   func placeholder(in _: Context) -> DayEntry {
     DayEntry(date: Date(), showFunFont: false)
   }
+  
+  func snapshot(for configuration: ChangeFontIntent, in context: Context) async -> DayEntry {
+    return DayEntry(date: Date(), showFunFont: false)
+  }
+  
+  func timeline(for configuration: ChangeFontIntent, in context: Context) async -> Timeline<DayEntry> {
+    var entries: [DayEntry] = []
 
-  func getSnapshot(for _: ChangeFontIntent, in _: Context, completion: @escaping (DayEntry) -> Void) {
+    let showFunFont: Bool = configuration.funFont
+
+    // Generate a timeline consisting of seven entries a day apart, starting from the current date.
+    let currentDate = Date()
+    for dayOffset in 0 ..< 7 {
+      let entryDate = Calendar.current.date(byAdding: .day, value: dayOffset, to: currentDate)!
+      let startDate = Calendar.current.startOfDay(for: entryDate)
+      let entry = DayEntry(date: startDate, showFunFont: showFunFont)
+      entries.append(entry)
+    }
+
+    return Timeline(entries: entries, policy: .atEnd)
+  }
+  
+  
+  // IntentTimelineProvider
+  /*func getSnapshot(for _: ChangeFontIntent, in _: Context, completion: @escaping (DayEntry) -> Void) {
     let entry = DayEntry(date: Date(), showFunFont: false)
     completion(entry)
   }
@@ -36,7 +60,7 @@ struct Provider: IntentTimelineProvider {
 
     let timeline = Timeline(entries: entries, policy: .atEnd)
     completion(timeline)
-  }
+  }*/
 }
 
 // MARK: - DayEntry
@@ -78,7 +102,7 @@ struct DayEntry: TimelineEntry {
 struct MonthlyWidgetEntryView: View {
   @Environment(\.showsWidgetContainerBackground) var showsWidgetContainerBackground
   @Environment(\.widgetRenderingMode) var rendingMode
-  
+
   var entry: DayEntry
   var config: MonthConfig
   let funFontName: String = "Chalkduster"
@@ -89,19 +113,11 @@ struct MonthlyWidgetEntryView: View {
   }
 
   var body: some View {
-    if #available(iOS 17.0, *) {
+    ZStack {
+      ContainerRelativeShape()
+        .fill(config.backgroundColor.gradient)
       calendarBody()
-        .containerBackground(for: .widget) {
-          ContainerRelativeShape()
-            .fill(config.backgroundColor.gradient)
-        }
-    } else {
-      ZStack {
-        ContainerRelativeShape()
-          .fill(config.backgroundColor.gradient)
-        calendarBody()
-          .padding()
-      }
+        .padding()
     }
   }
 
@@ -138,7 +154,7 @@ struct MonthlyWidget: Widget {
   let kind: String = "MonthlyWidget"
 
   var body: some WidgetConfiguration {
-    IntentConfiguration(
+    AppIntentConfiguration(
       kind: kind,
       intent: ChangeFontIntent.self,
       provider: Provider()
@@ -160,6 +176,29 @@ struct MonthlyWidget: Widget {
     .contentMarginsDisabled()
     // 禁止哪些地方顯示Widget
     .disfavoredLocations([.lockScreen], for: [.systemSmall])
+
+    /*IntentConfiguration(
+      kind: kind,
+      intent: ChangeFontIntent.self,
+      provider: Provider()
+    ) { entry in
+      if #available(iOS 17.0, *) {
+        MonthlyWidgetEntryView(entry: entry)
+          .containerBackground(.white.gradient, for: .widget)
+      } else {
+        MonthlyWidgetEntryView(entry: entry)
+          .padding()
+          .background()
+      }
+    }
+    .configurationDisplayName("Monthly Style Widget")
+    .description("The theme of the widget changes base on month.")
+    .supportedFamilies([.systemSmall])
+    // iOS 17 later 主要用來取消預設padding
+    // Reference = https://shorturl.at/diAIR
+    .contentMarginsDisabled()
+    // 禁止哪些地方顯示Widget
+    .disfavoredLocations([.lockScreen], for: [.systemSmall])*/
   }
 }
 
@@ -167,4 +206,15 @@ struct MonthlyWidget: Widget {
   MonthlyWidget()
 } timeline: {
   DayEntry(date: .now, showFunFont: false)
+}
+
+// MARK: - ChangeFontIntent
+
+struct ChangeFontIntent: AppIntent, WidgetConfigurationIntent {
+  static var title: LocalizedStringResource = "Fun Font"
+
+  static var description: IntentDescription? = .init(stringLiteral: "Switch to a fun font")
+
+  @Parameter(title: "Fun Font")
+  var funFont: Bool
 }
