@@ -8,13 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		710399432AC658270043CCF3 /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710399422AC658270043CCF3 /* UserDefaults+Extension.swift */; };
-		710399462AE16F0B0043CCF3 /* SelectRepoIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 710399452AE16F0B0043CCF3 /* SelectRepoIntents.intentdefinition */; };
-		710399472AE16F0B0043CCF3 /* SelectRepoIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 710399452AE16F0B0043CCF3 /* SelectRepoIntents.intentdefinition */; };
 		7103994F2AE16FF90043CCF3 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7103994E2AE16FF90043CCF3 /* Intents.framework */; };
 		710399522AE16FF90043CCF3 /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710399512AE16FF90043CCF3 /* IntentHandler.swift */; };
 		710399562AE16FF90043CCF3 /* RepoWatcherIntents.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7103994D2AE16FF90043CCF3 /* RepoWatcherIntents.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		7103995B2AE170960043CCF3 /* SelectRepoIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 710399452AE16F0B0043CCF3 /* SelectRepoIntents.intentdefinition */; };
 		7103995C2AE171330043CCF3 /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710399422AC658270043CCF3 /* UserDefaults+Extension.swift */; };
+		710EC53D2B24B2A80051C95C /* SelectSingleRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710EC53B2B24B2A80051C95C /* SelectSingleRepo.swift */; };
+		710EC53E2B24B2F50051C95C /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710399422AC658270043CCF3 /* UserDefaults+Extension.swift */; };
+		710EC53F2B24B8DD0051C95C /* SelectRepoIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 710399452AE16F0B0043CCF3 /* SelectRepoIntents.intentdefinition */; };
+		710EC5402B24B8DE0051C95C /* SelectRepoIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 710399452AE16F0B0043CCF3 /* SelectRepoIntents.intentdefinition */; };
+		710EC5412B24B8DF0051C95C /* SelectRepoIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 710399452AE16F0B0043CCF3 /* SelectRepoIntents.intentdefinition */; };
 		71D8F1B52A9CEB49009F31C7 /* RepoWatcherApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D8F1B42A9CEB49009F31C7 /* RepoWatcherApp.swift */; };
 		71D8F1B72A9CEB49009F31C7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D8F1B62A9CEB49009F31C7 /* ContentView.swift */; };
 		71D8F1B92A9CEB4D009F31C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71D8F1B82A9CEB4D009F31C7 /* Assets.xcassets */; };
@@ -79,6 +81,7 @@
 		710399512AE16FF90043CCF3 /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
 		710399532AE16FF90043CCF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7103995A2AE1700D0043CCF3 /* RepoWatcherIntents.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RepoWatcherIntents.entitlements; sourceTree = "<group>"; };
+		710EC53B2B24B2A80051C95C /* SelectSingleRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSingleRepo.swift; sourceTree = "<group>"; };
 		7175D0792AC6579000710B1E /* RepoWatcher.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RepoWatcher.entitlements; sourceTree = "<group>"; };
 		71D8F1B12A9CEB49009F31C7 /* RepoWatcher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RepoWatcher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71D8F1B42A9CEB49009F31C7 /* RepoWatcherApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoWatcherApp.swift; sourceTree = "<group>"; };
@@ -204,6 +207,7 @@
 				71D8F1CF2A9CEBA1009F31C7 /* DoubleRepoWidget.swift */,
 				71D8F1E12AA621D8009F31C7 /* RepoWatcherMediumView.swift */,
 				71D8F1E72AAA1618009F31C7 /* SingleRepoWidget.swift */,
+				710EC53B2B24B2A80051C95C /* SelectSingleRepo.swift */,
 				71D8F1EB2AAC68B1009F31C7 /* ContributorMediumView.swift */,
 				71D8F1E32AAA0FF7009F31C7 /* MockData.swift */,
 				71D8F1D12A9CEBA4009F31C7 /* Assets.xcassets */,
@@ -342,8 +346,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7103995B2AE170960043CCF3 /* SelectRepoIntents.intentdefinition in Sources */,
 				7103995C2AE171330043CCF3 /* UserDefaults+Extension.swift in Sources */,
+				710EC5412B24B8DF0051C95C /* SelectRepoIntents.intentdefinition in Sources */,
 				710399522AE16FF90043CCF3 /* IntentHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,7 +359,7 @@
 				71D8F1DF2AA37BC7009F31C7 /* APIManager.swift in Sources */,
 				71D8F1EE2AACC937009F31C7 /* Contributor.swift in Sources */,
 				71D8F1B72A9CEB49009F31C7 /* ContentView.swift in Sources */,
-				710399462AE16F0B0043CCF3 /* SelectRepoIntents.intentdefinition in Sources */,
+				710EC53F2B24B8DD0051C95C /* SelectRepoIntents.intentdefinition in Sources */,
 				71D8F1B52A9CEB49009F31C7 /* RepoWatcherApp.swift in Sources */,
 				710399432AC658270043CCF3 /* UserDefaults+Extension.swift in Sources */,
 				71D8F1DC2AA0D79E009F31C7 /* Repository.swift in Sources */,
@@ -366,15 +370,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				710399472AE16F0B0043CCF3 /* SelectRepoIntents.intentdefinition in Sources */,
 				71D8F1E82AAA1618009F31C7 /* SingleRepoWidget.swift in Sources */,
 				71D8F1EF2AACC937009F31C7 /* Contributor.swift in Sources */,
 				71D8F1E22AA621D8009F31C7 /* RepoWatcherMediumView.swift in Sources */,
+				710EC53D2B24B2A80051C95C /* SelectSingleRepo.swift in Sources */,
 				71D8F1E42AAA0FF7009F31C7 /* MockData.swift in Sources */,
 				71D8F1E02AA37BC7009F31C7 /* APIManager.swift in Sources */,
 				71D8F1D02A9CEBA1009F31C7 /* DoubleRepoWidget.swift in Sources */,
 				71D8F1EC2AAC68B1009F31C7 /* ContributorMediumView.swift in Sources */,
 				71D8F1CE2A9CEBA1009F31C7 /* RepoWatcherWidgetBundle.swift in Sources */,
+				710EC53E2B24B2F50051C95C /* UserDefaults+Extension.swift in Sources */,
+				710EC5402B24B8DE0051C95C /* SelectRepoIntents.intentdefinition in Sources */,
 				71D8F1DD2AA0D79E009F31C7 /* Repository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

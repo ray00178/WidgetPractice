@@ -8,11 +8,11 @@
 import SwiftUI
 import WidgetKit
 
-@main
+//@main
 struct RepoWatcherWidgetBundle: WidgetBundle {
   var body: some Widget {
     // 放入各種樣式的Widgte
     SingleRepoWidget()
-    DoubleRepoWidget()
+    //DoubleRepoWidget()
   }
 }
