@@ -5,49 +5,50 @@
 //  Created by Ray on 2023/9/18.
 //
 
-import CoreData
+import SwiftData
 import SwiftUI
 import WidgetKit
 
 // MARK: - Provider
 
 struct Provider: TimelineProvider {
-  var viewContext = PersistenceController.shared.container.viewContext
-
-  var dayFetchRequest: NSFetchRequest<Day> {
-    let request = Day.fetchRequest()
-    request.sortDescriptors = [NSSortDescriptor(keyPath: \Day.date, ascending: true)]
-    request.predicate = NSPredicate(format: "(date >= %@) AND (date <= %@)",
-                                    Date().startOfCalendarWithPrefixDays as CVarArg,
-                                    Date().endOfMonth as CVarArg)
-    return request
-  }
-
   func placeholder(in _: Context) -> CalendarEntry {
     CalendarEntry(date: Date(), days: [])
   }
 
+  @MainActor
   func getSnapshot(in _: Context, completion: @escaping (CalendarEntry) -> Void) {
-    do {
-      let days = try viewContext.fetch(dayFetchRequest)
-      let entry = CalendarEntry(date: Date(), days: days)
+    let entry = CalendarEntry(date: Date(), days: fetchDays())
 
-      completion(entry)
-    } catch {
-      print("Widget failed to fetch days in snapshot. \(error.localizedDescription)")
-    }
+    completion(entry)
   }
 
+  @MainActor
   func getTimeline(in _: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-    do {
-      let days = try viewContext.fetch(dayFetchRequest)
-      let entry = CalendarEntry(date: Date(), days: days)
-      let timeline = Timeline(entries: [entry], policy: .after(.now.endOfDay))
+    let entry = CalendarEntry(date: Date(), days: fetchDays())
+    let timeline = Timeline(entries: [entry], policy: .after(.now.endOfDay))
 
-      completion(timeline)
-    } catch {
-      print("Widget failed to fetch days in timeline. \(error.localizedDescription)")
+    completion(timeline)
+  }
+
+  @MainActor
+  func fetchDays() -> [Day] {
+    var shareStoreURL: URL {
+      let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.tw.midnight.SwiftCal")!
+      return container.appending(path: "SwiftCal.sqlite")
     }
+
+    let container: ModelContainer = {
+      let config = ModelConfiguration(url: shareStoreURL)
+      return try! ModelContainer(for: Day.self, configurations: config)
+    }()
+
+    let startDate: Date = .now.startOfCalendarWithPrefixDays
+    let endDate: Date = .now.endOfMonth
+    let predicate = #Predicate<Day> { $0.date > startDate && $0.date < endDate }
+    let discriptor = FetchDescriptor<Day>(predicate: predicate, sortBy: [.init(\.date)])
+
+    return try! container.mainContext.fetch(discriptor)
   }
 }
 
@@ -85,7 +86,7 @@ struct SwiftCalWidgetEntryView: View {
   func calculateStreakValue() -> Int {
     guard entry.days.isEmpty == false else { return 0 }
 
-    let nonFutureDate = entry.days.filter { $0.date!.dayInt <= Date().dayInt }
+    let nonFutureDate = entry.days.filter { $0.date.dayInt <= Date().dayInt }
 
     var streakCount = 0
 
@@ -93,7 +94,7 @@ struct SwiftCalWidgetEntryView: View {
       if day.didStudy {
         streakCount += 1
       } else {
-        if day.date!.dayInt != Date().dayInt {
+        if day.date.dayInt != Date().dayInt {
           break
         }
       }
@@ -113,12 +114,10 @@ struct SwiftCalWidget: Widget {
       if #available(iOS 17.0, *) {
         SwiftCalWidgetEntryView(entry: entry)
           .containerBackground(.fill.tertiary, for: .widget)
-          .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
       } else {
         SwiftCalWidgetEntryView(entry: entry)
           .padding()
           .background()
-          .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
       }
     }
     .configurationDisplayName("Swift Study Calendar")
@@ -172,10 +171,10 @@ private struct MediumCalendarView: View {
 
           LazyVGrid(columns: columns, spacing: 8) {
             ForEach(entry.days) { day in
-              if day.date!.monthInt != Date().monthInt {
+              if day.date.monthInt != Date().monthInt {
                 Text(" ")
               } else {
-                Text(day.date!.formatted(.dateTime.day()))
+                Text(day.date.formatted(.dateTime.day()))
                   .font(.caption2)
                   .bold()
                   .frame(maxWidth: .infinity)
@@ -202,13 +201,13 @@ private struct LockScreenCircularView: View {
   var entry: CalendarEntry
 
   var currentCalendarDays: Int {
-    entry.days.filter { $0.date?.monthInt == Date().monthInt }.count
+    entry.days.filter { $0.date.monthInt == Date().monthInt }.count
   }
 
   var daysStudied: Int {
-    entry.days.filter { $0.date?.monthInt == Date().monthInt }
-              .filter(\.didStudy)
-              .count
+    entry.days.filter { $0.date.monthInt == Date().monthInt }
+      .filter(\.didStudy)
+      .count
   }
 
   var body: some View {
@@ -236,7 +235,7 @@ private struct LockScreenRectangularView: View {
   var body: some View {
     LazyVGrid(columns: columns, spacing: 4) {
       ForEach(entry.days) { day in
-        if day.date!.monthInt != Date().monthInt {
+        if day.date.monthInt != Date().monthInt {
           Text(" ")
             .font(.system(size: 7))
         } else {
@@ -246,7 +245,7 @@ private struct LockScreenRectangularView: View {
               .aspectRatio(contentMode: .fit)
               .frame(width: 7, height: 7)
           } else {
-            Text(day.date!.formatted(.dateTime.day()))
+            Text(day.date.formatted(.dateTime.day()))
               .font(.system(size: 7))
               .frame(maxWidth: .infinity)
           }

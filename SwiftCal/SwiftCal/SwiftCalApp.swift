@@ -5,17 +5,26 @@
 //  Created by Ray on 2023/9/10.
 //
 
-import Security
 import SwiftUI
+import SwiftData
 
 // MARK: - SwiftCalApp
 
 @main
 struct SwiftCalApp: App {
-  let persistenceController = PersistenceController.shared
 
   @State private var selectedTab: Int = 0
-
+  
+  static var shareStoreURL: URL {
+    let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.tw.midnight.SwiftCal")!
+    return container.appending(path: "SwiftCal.sqlite")
+  }
+  
+  let container: ModelContainer = {
+    let config = ModelConfiguration(url: shareStoreURL)
+    return try! ModelContainer(for: Day.self, configurations: config)
+  }()
+  
   init() {
     // Refrence = https://www.theswift.dev/posts/swiftui-alert-with-styled-buttons
     UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = .orange
@@ -33,7 +42,7 @@ struct SwiftCalApp: App {
           .tag(1)
           
       }
-      .environment(\.managedObjectContext, persistenceController.container.viewContext)
+      .modelContainer(container)
       .onOpenURL { url in
         selectedTab = url.absoluteString == "calendar" ? 0 : 1
       }

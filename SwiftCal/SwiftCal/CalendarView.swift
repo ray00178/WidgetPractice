@@ -5,23 +5,20 @@
 //  Created by Ray on 2023/9/10.
 //
 
-import CoreData
+import SwiftData
 import SwiftUI
 import WidgetKit
 
 // MARK: - CalendarView
 
 struct CalendarView: View {
-  @Environment(\.managedObjectContext) private var viewContext
-
-  @FetchRequest(
-    sortDescriptors: [NSSortDescriptor(keyPath: \Day.date, ascending: true)],
-    predicate: NSPredicate(format: "(date >= %@) AND (date <= %@)",
-                           Date().startOfCalendarWithPrefixDays as CVarArg,
-                           Date().endOfMonth as CVarArg),
-    animation: .default
-  )
-  private var days: FetchedResults<Day>
+  @Environment(\.modelContext) private var context
+  
+  @Query(filter: #Predicate<Day> { $0.date > startDate && $0.date < endDate }, sort: \Day.date)
+  var days: [Day]
+  
+  static var startDate: Date { .now.startOfCalendarWithPrefixDays }
+  static var endDate: Date { .now.endOfMonth }
   
   @State private var showAlert: Bool = false
   
@@ -34,10 +31,10 @@ struct CalendarView: View {
         
         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
           ForEach(days) { (day) in
-            if day.date?.monthInt != Date().monthInt {
+            if day.date.monthInt != Date().monthInt {
               Text(" ")
             } else {
-              Text(day.date!.formatted(.dateTime.day()))
+              Text(day.date.formatted(.dateTime.day()))
                 .fontWeight(.bold)
                 .foregroundStyle(day.didStudy ? .orange : .secondary)
                 .frame(maxWidth: .infinity, minHeight: 40)
@@ -46,18 +43,12 @@ struct CalendarView: View {
                     .foregroundStyle(.orange.opacity(day.didStudy ? 0.3 : 0.0))
                 )
                 .onTapGesture {
-                  if (day.date?.dayInt)! <= Date().dayInt {
+                  if day.date.dayInt <= Date().dayInt {
                     day.didStudy.toggle()
                     
-                    do {
-                      try viewContext.save()
-                      
-                      // Reload Widget
-                      // See SwiftCalWidget to get kind string
-                      WidgetCenter.shared.reloadTimelines(ofKind: "SwiftCalWidget")
-                    } catch {
-                      print("Failed to save.")
-                    }
+                    // Reload Widget
+                    // See SwiftCalWidget to get kind string
+                    WidgetCenter.shared.reloadTimelines(ofKind: "SwiftCalWidget")
                   } else {
                     showAlert = true
                   }
@@ -94,20 +85,13 @@ struct CalendarView: View {
   
   func createMonthDays(for date: Date) {
     for i in 0 ..< date.numberOfDaysInMonth {
-      let day = Day(context: viewContext)
-      day.date = Calendar.current.date(byAdding: .day, value: i, to: date.startOfMonth)
-      day.didStudy = false
-    }
-    
-    do {
-      try viewContext.save()
-    } catch {
-      print("Failed to save.")
+      let date = Calendar.current.date(byAdding: .day, value: i, to: date.startOfMonth)!
+      let newDay = Day(date: date, didStudy: false)
+      context.insert(newDay)
     }
   }
 }
 
 #Preview {
   CalendarView()
-    .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
