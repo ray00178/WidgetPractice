@@ -5,26 +5,15 @@
 //  Created by Ray on 2023/9/10.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 // MARK: - SwiftCalApp
 
 @main
 struct SwiftCalApp: App {
-
   @State private var selectedTab: Int = 0
-  
-  static var shareStoreURL: URL {
-    let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.tw.midnight.SwiftCal")!
-    return container.appending(path: "SwiftCal.sqlite")
-  }
-  
-  let container: ModelContainer = {
-    let config = ModelConfiguration(url: shareStoreURL)
-    return try! ModelContainer(for: Day.self, configurations: config)
-  }()
-  
+
   init() {
     // Refrence = https://www.theswift.dev/posts/swiftui-alert-with-styled-buttons
     UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = .orange
@@ -40,17 +29,17 @@ struct SwiftCalApp: App {
         StreakView()
           .tabItem { Label("Streak", systemImage: "swift") }
           .tag(1)
-          
       }
-      .modelContainer(container)
+      .modelContainer(Persistence.container)
       .onOpenURL { url in
         selectedTab = url.absoluteString == "calendar" ? 0 : 1
       }
       .onAppear {
-        //addToKeychain(key: "secret", value: "123456")
-        
+        // addToKeychain(key: "secret", value: "123456")
+
         if let data = retrieveFromKeychain(key: "secret"),
-           let value = String(data: data, encoding: .utf8) {
+           let value = String(data: data, encoding: .utf8)
+        {
           print("retrieve = \(value)")
         } else {
           print("retrieve failure.")
@@ -70,7 +59,7 @@ extension SwiftCalApp {
     let attributes = [
       kSecClass: kSecClassGenericPassword,
       kSecAttrService: "tw.midnight.SwiftCal",
-      //kSecAttrAccessGroup: "yourteamid.tw.midnight.SwiftCal",
+      // kSecAttrAccessGroup: "yourteamid.tw.midnight.SwiftCal",
       kSecAttrAccount: key,
       kSecValueData: Data(value.utf8),
     ] as CFDictionary
@@ -91,7 +80,7 @@ extension SwiftCalApp {
     let query = [
       kSecClass: kSecClassGenericPassword,
       kSecAttrService: "tw.midnight.SwiftCal",
-      //kSecAttrAccessGroup: "yourteamid.tw.midnight.SwiftCal",
+      // kSecAttrAccessGroup: "yourteamid.tw.midnight.SwiftCal",
       kSecAttrAccount: key,
       kSecReturnData: true,
       kSecReturnAttributes: true,
@@ -101,8 +90,9 @@ extension SwiftCalApp {
     let status = SecItemCopyMatching(query as CFDictionary, &item)
 
     if status == errSecSuccess {
-      if let dictionary = item as? [String : Any],
-         let data = dictionary[kSecValueData as String] as? Data {
+      if let dictionary = item as? [String: Any],
+         let data = dictionary[kSecValueData as String] as? Data
+      {
         print("dictionary = \(dictionary)")
         return data
       } else {

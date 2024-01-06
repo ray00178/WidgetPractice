@@ -5,6 +5,7 @@
 //  Created by Ray on 2023/9/18.
 //
 
+import AppIntents
 import SwiftData
 import SwiftUI
 import WidgetKit
@@ -33,22 +34,13 @@ struct Provider: TimelineProvider {
 
   @MainActor
   func fetchDays() -> [Day] {
-    var shareStoreURL: URL {
-      let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.tw.midnight.SwiftCal")!
-      return container.appending(path: "SwiftCal.sqlite")
-    }
-
-    let container: ModelContainer = {
-      let config = ModelConfiguration(url: shareStoreURL)
-      return try! ModelContainer(for: Day.self, configurations: config)
-    }()
-
     let startDate: Date = .now.startOfCalendarWithPrefixDays
     let endDate: Date = .now.endOfMonth
     let predicate = #Predicate<Day> { $0.date > startDate && $0.date < endDate }
     let discriptor = FetchDescriptor<Day>(predicate: predicate, sortBy: [.init(\.date)])
 
-    return try! container.mainContext.fetch(discriptor)
+    let context = ModelContext(Persistence.container)
+    return try! context.fetch(discriptor)
   }
 }
 
@@ -146,23 +138,39 @@ struct SwiftCalWidget: Widget {
 
 private struct MediumCalendarView: View {
   var entry: CalendarEntry
-
   var streakValue: Int
-
   var columns: [GridItem] = Array(repeating: GridItem(.flexible()), count: 7)
+
+  var today: Day {
+    let day = entry.days.filter { Calendar.current.isDate($0.date, inSameDayAs: .now) }.first
+    
+    return day ?? .init(date: .distantPast, didStudy: false)
+  }
 
   var body: some View {
     HStack {
-      Link(destination: URL(string: "streak")!) {
-        VStack {
-          Text("\(streakValue)")
-            .font(.system(size: 70, design: .rounded))
-            .bold()
-            .foregroundStyle(.orange)
-          Text("day streak")
-            .font(.caption2)
-            .foregroundStyle(.secondary)
+      VStack {
+        Link(destination: URL(string: "streak")!) {
+          VStack {
+            Text("\(streakValue)")
+              .font(.system(size: 70, design: .rounded))
+              .bold()
+              .foregroundStyle(.orange)
+              .contentTransition(.numericText())
+            
+            Text("day streak")
+              .font(.caption2)
+              .foregroundStyle(.secondary)
+          }
         }
+        .frame(width: 110)
+
+        Button(today.didStudy ? "Studied" : "Study",
+               systemImage: today.didStudy ? "checkmark.circle" : "book",
+               intent: ToggleStudyIntent(date: today.date))
+          .font(.callout)
+          .tint(today.didStudy ? .mint : .orange)
+          .controlSize(.small)
       }
 
       Link(destination: URL(string: "calendar")!) {
